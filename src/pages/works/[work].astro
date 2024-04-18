@@ -1,0 +1,96 @@
+---
+import type { Work } from "../../env";
+
+import { sanityClient } from "sanity:client";
+import SanityImage from "../../components/SanityImage.astro";
+import { urlFor } from "../../components/SanityImageUrl.astro";
+
+import Base from "../../layouts/Base.astro";
+
+import "../../styles/works.css";
+
+export async function getStaticPaths() {
+  const works: Work[] = await sanityClient.fetch(`*[_type == "work"]`);
+
+  return works.map(
+    ({ slug, coverImage, description, images, name, services, year }) => {
+      return {
+        params: { work: slug.current },
+        props: {
+          title: name,
+          services,
+          year,
+          description: description.map((item) => item.children[0].text),
+          imageComp: coverImage,
+          images: images,
+        },
+      };
+    }
+  );
+}
+
+// const { work } = Astro.params;
+const { title, services, year, description, imageComp, images } = Astro.props;
+const coverImage = urlFor(imageComp).width(1600).url();
+const ogCoverImage = urlFor(imageComp).width(900).height(470).url();
+---
+
+<Base title={title} ogCoverImage={ogCoverImage} description={description}>
+  <div>
+    <div
+      class={`
+        w-full
+        text-center
+        h-[60vh]
+        md:h-[70vh]
+        lg:h-[70vh]
+        xl:h-[90vh]
+        bg-slate-400
+        absolute
+        -z-10
+        top-0
+        left-0
+        right-0
+        bg-center
+        bg-cover
+        bg-no-repeat`}
+      style={{
+        backgroundImage: `url('${coverImage}')`,
+      }}
+    >
+    </div>
+    <div
+      class="relative mt-[60vh] md:mt-[70vh] lg:mt-[70vh] xl:mt-[90vh] pt-8 md:pt-12 xl:pt-20 flex flex-wrap gap-6 md:flex-nowrap md:gap-8 mb-10 md:mb-14 xl:mb-20"
+    >
+      <div
+        class="flex flex-wrap gap-3 md:w-1/4 content-start text-brand dark:text-white"
+      >
+        <div class="w-full">
+          <p class="text-base xl:text-lg mb-0.5 lg:mb-1">Proyecto</p>
+          <p class="text-sm text-red-gray-light">{title}</p>
+        </div>
+        <div class="w-full">
+          <p class="text-base xl:text-lg mb-0.5 lg:mb-1">Qué hice</p>
+          {
+            services.map((service) => (
+              <p class="text-sm text-red-gray-light">{service}</p>
+            ))
+          }
+        </div>
+        <div class="w-full">
+          <p class="text-base xl:text-lg mb-0.5 lg:mb-1">Año</p>
+          <p class="text-sm text-red-gray-light">{year}</p>
+        </div>
+      </div>
+      <div
+        class="font-light text-base leading-relaxed lg:text-[17px] xl:text-[18px] lg:leading-normal text-red-gray-light grid gap-3 md:w-3/4 lg:pl-24 xl:pl-44 lg:pr-4 xl:pr-16"
+      >
+        {description.map((desc) => <p>{desc}</p>)}
+      </div>
+    </div>
+    <!-- Images grid -->
+    <div class="works-images-grid">
+      {images.map((image) => <SanityImage node={image} />)}
+    </div>
+  </div>
+</Base>

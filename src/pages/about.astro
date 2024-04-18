@@ -1,0 +1,48 @@
+---
+import { Image } from "astro:assets";
+
+import Base from "../layouts/Base.astro";
+
+import { sanityClient } from "sanity:client";
+
+import MeImage from "../images/me.webp";
+import PortableText from "../components/PortableText.astro";
+
+const aboutResponse = await sanityClient.fetch(`*[_type == "about"]`);
+const { about_me, skills, linkedin_link } = aboutResponse[0];
+---
+
+<Base title="Sobre mi">
+  <div
+    class="mt-32 md:mt-44 grid gap-10 md:grid-cols-5 lg:items-center lg:gap-16 xl:gap-24"
+  >
+    <div class="md:col-start-1 md:col-end-3">
+      <Image src={MeImage} alt="Yo" class="rounded-lg" />
+    </div>
+    <div class="text-brand dark:text-white md:col-start-3 md:col-end-6">
+      <h1 class="font-gt text-2xl lg:text-3xl mb-3 lg:mb-4">Sobre mi</h1>
+      <div
+        class="font-light text-red-gray-light text-base leading-relaxed lg:text-[17px] xl:text-[18px]"
+      >
+        <PortableText portableText={about_me} />
+      </div>
+      <div class="mt-8 mb-9">
+        <h2 class="font-gt text-xl lg:text-2xl mb-3">Skills</h2>
+        <ul
+          class="grid grid-cols-2 font-light list-disc list-inside text-red-gray-light"
+        >
+          {skills.map((skill: string) => <li>{skill}</li>)}
+        </ul>
+      </div>
+      <div class="flex gap-6">
+        <a href="#" class="underline font-light text-base">Descargar CV</a>
+        <a
+          href={linkedin_link}
+          class="underline font-light text-base"
+          target="_blank">LinkedIn</a
+        >
+      </div>
+    </div>
+  </div>
+  <div></div>
+</Base>

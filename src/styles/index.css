@@ -1,0 +1,65 @@
+/* Index grid: work cards grid */
+
+.works-grid {
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    .work {
+        grid-column-start: 1;
+        grid-column-end: 3;
+        svg path {
+            @apply stroke-red-gray-light transition duration-300;
+        }
+        &:hover {
+            svg path {
+                @apply stroke-brand dark:stroke-white;
+            }
+        }
+    }
+}
+
+/* xs */
+@media (width > 520px) {
+    .works-grid {
+        column-gap: 1.5rem/* 24px */;
+        row-gap: 2rem/* 32px */;
+        .work {
+            grid-column-start: auto;
+            grid-column-end: auto;
+            &:nth-child(3n + 3) {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+        }
+    }
+}
+
+/* sm */
+@media (width > 640px) {}
+
+/* md */
+@media (width > 768px) {}
+
+/* lg */
+@media (width > 1024px) {
+    .works-grid {
+        column-gap: 2rem/* 32px */;
+        row-gap: 2.5rem/* 40px */;
+    }
+}
+
+/* xl */
+@media (width > 1280px) {
+    .works-grid {
+        column-gap: 2.5rem/* 40px */;
+        row-gap: 4rem/* 64px */;
+    }
+}
+
+/* 2xl */
+@media (width > 1536px) {
+    .works-grid {
+        column-gap: 3.5rem/* 56px */;
+        row-gap: 5rem/* 80px */;
+    }
+}

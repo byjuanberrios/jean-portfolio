@@ -1,0 +1,37 @@
+/* Single work images grid */
+
+.works-images-grid {
+    display: grid;
+    /* grid-template-columns: repeat(auto-fill, minmax(min(100%, 50%), 1fr)); */
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-gap: 12px;
+    img {
+        @apply rounded-lg;
+        width: 100%;
+        max-width: 100%;
+        grid-column-start: 1;
+        grid-column-end: 3;
+    }
+}
+
+@media (width > 768px) {
+    .works-images-grid {
+        grid-gap: 18px;
+        img {
+            grid-column-start: auto;
+            grid-column-end: auto;
+            &:nth-child(3n + 3) {
+                grid-column-start: 1;
+                grid-column-end: 3;
+            }
+        }
+    }
+}
+
+@media (width > 1280px) {
+    .works-images-grid {
+        grid-column-gap: 30px;
+        grid-row-gap: 34px;
+        /* img {} */
+    }
+}

@@ -1,16 +1,57 @@
 ---
+import type { Work } from "../env";
 
+import Base from "../layouts/Base.astro";
+
+import { sanityClient } from "sanity:client";
+import SanityImage from "../components/SanityImage.astro";
+
+import ArrowIcon from "../components/assets/ArrowIcon.astro";
+
+import "../styles/index.css";
+
+const works: Work[] = await sanityClient.fetch(
+  `*[_type == "work" && defined(slug)] | order(publishedAt desc)`
+);
+
+const indexData = await sanityClient.fetch(`*[_type == "index"]`);
+
+const presentation = indexData[0].presentation[0].children.map(
+  (d: { text: string; _key: "string"; _type: string; marks: string[] }) =>
+    d.marks.length ? `<${d.marks[0]}>${d.text}</${d.marks[0]}>` : d.text
+);
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Base>
+  <!-- Presentación -->
+  <div
+    class="px-4 mt-40 md:mt-52 lg:mt-60 2xl:mt-64 mb-24 sm:mb-28 md:mb-32 lg:mb-36 2xl:mb-44 flex justify-center items-center"
+  >
+    <h2
+      class="fadeInUp text-brand dark:text-white text-center text-lg sm:text-xl sm:leading-[160%] md:text-[22px] lg:text-2xl lg:leading-[165%] sm:max-w-[48ch]"
+      set:html={presentation}
+    />
+  </div>
+  <!-- Works Grid -->
+  <div class="works-grid">
+    {
+      works.map((work) => (
+        <a href={`/works/${work.slug.current}`} class="work">
+          <SanityImage
+            node={work.coverImage}
+            class="mb-4 rounded-lg aspect-square md:aspect-auto object-cover md:object-contain"
+          />
+          <div class="flex justify-between">
+            <div>
+              <h2 class="text-xl xs:text-base md:text-lg lg:text-xl text-brand dark:text-white mb-0.5">
+                {work.name}
+              </h2>
+              <p class="font-gt text-sm text-red-gray-light">{work.client}</p>
+            </div>
+            <ArrowIcon size={25} />
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</Base>

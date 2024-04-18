@@ -1,0 +1,66 @@
+---
+const pathname = Astro.url.pathname;
+const currentPath = pathname.slice(1);
+
+const activedMenuClasses = "bg-brand dark:bg-white text-white dark:text-brand";
+const inactiveMenuClasses =
+  "text-brand hover:bg-red-gray-light/15 dark:text-white dark:hover:bg-red-gray-light/30";
+---
+
+<header
+  id="header"
+  class="header
+    absolute
+    py-6
+    md:py-8
+    xl:py-12
+    px-5
+    sm:px-7
+    md:px-12
+    xl:px-24
+    top-0
+    left-0
+    right-0
+    w-full
+    xl:max-w-screen-2xl
+    xl:mx-auto
+    z-10
+    transition-[top]
+    duration-300"
+>
+  <div class="flex justify-between items-center">
+    <a
+      href="/"
+      class="text-brand dark:text-white font-gt text-2xl md:text-[28px] lg:mb-0.5 pl-1.5"
+      >Jean.</a
+    >
+    <button
+      transition:persist
+      class="mobile-button bg-brand dark:bg-white text-white dark:text-brand text-xs rounded-full px-4 py-2 xs:hidden"
+      >Menú</button
+    >
+    <div class="hidden xs:block md:flex md:gap-3">
+      <a
+        href="/"
+        class={`${currentPath === "" || currentPath.startsWith("works") ? activedMenuClasses : inactiveMenuClasses} text-xs md:text-sm rounded-full px-4 md:px-5 py-2 md:py-2.5 transition`}
+        >Proyectos</a
+      >
+      <a
+        href="/about"
+        class={`${currentPath === "about" ? activedMenuClasses : inactiveMenuClasses} text-xs md:text-sm rounded-full px-4 md:px-5 py-2 md:py-2.5 transition`}
+        >Sobre mi</a
+      >
+    </div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" transition:persist>
+      <div class="mobile-menu-header">
+        <a href="/" class="brand">Jean.</a>
+        <button class="close-menu">Cerrar</button>
+      </div>
+      <div class="mobile-menu-items">
+        <a href="/">Proyectos</a>
+        <a href="/about">Sobre mi</a>
+      </div>
+    </div>
+  </div>
+</header>
