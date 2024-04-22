@@ -90,7 +90,7 @@ const ogCoverImage = urlFor(imageComp).width(900).height(470).url();
     </div>
     <!-- Images grid -->
     <div class="works-images-grid">
-      {images.map((image) => <SanityImage node={image} />)}
+      {images && images.map((image) => <SanityImage node={image} />)}
     </div>
   </div>
 </Base>
