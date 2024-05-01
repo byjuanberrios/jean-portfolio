@@ -11,7 +11,7 @@ import ArrowIcon from "../components/assets/ArrowIcon.astro";
 import "../styles/index.css";
 
 const works: Work[] = await sanityClient.fetch(
-  `*[_type == "work" && defined(slug)] | order(publishedAt desc)`
+  `*[_type == "work" && defined(slug)] | order(_createdAt desc)`
 );
 
 const indexData = await sanityClient.fetch(`*[_type == "index"]`);

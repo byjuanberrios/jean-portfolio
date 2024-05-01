@@ -31,7 +31,7 @@ export async function getStaticPaths() {
 
 // const { work } = Astro.params;
 const { title, services, year, description, imageComp, images } = Astro.props;
-console.log(imageComp);
+
 const coverImage = urlFor(imageComp).url();
 const ogCoverImage = urlFor(imageComp).width(900).height(470).url();
 ---
